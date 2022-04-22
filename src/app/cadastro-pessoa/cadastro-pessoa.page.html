@@ -1,0 +1,66 @@
+    <ion-header translucent>
+      <ion-toolbar>
+        <ion-title>{{ headerModal }} Pessoa</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalCtrl.dismiss()">Fechar</ion-button>
+        </ion-buttons>
+      </ion-toolbar> 
+    </ion-header>
+
+    <ion-content>
+
+      <form [formGroup]="formGroup" (ngSubmit)="registrar(); $event.preventDefault()">
+        <ion-item *ngIf="headerModal !== 'Adicionar'">
+          <ion-label position="floating" color="secondary">Id</ion-label>
+          <ion-input formControlName="id" readonly type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Nome</ion-label>
+          <ion-input formControlName="nome" type="text"></ion-input>
+        </ion-item>
+        <p class="red" *ngIf="formGroup.controls.nome.dirty && formGroup.controls.nome.errors" margin-left>Valor inválido</p>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Cpf</ion-label>
+          <ion-input formControlName="cpf" type="text"></ion-input>
+        </ion-item>
+        <p class="red" *ngIf="formGroup.controls.cpf.dirty && formGroup.controls.cpf.errors" margin-left>Valor inválido</p>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Email</ion-label>
+          <ion-input formControlName="email" type="text"></ion-input>
+        </ion-item>
+        <p class="red" *ngIf="formGroup.controls.email.dirty && formGroup.controls.email.errors" margin-left>Valor inválido</p>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Sexo</ion-label>
+          <ion-select formControlName="sexo">
+            <ion-select-option value="M">Masculino</ion-select-option>
+            <ion-select-option value="F">Feminino</ion-select-option>
+            <ion-select-option value="O">Outro</ion-select-option>
+            <ion-select-option value="">Não informar</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item id="open-date-input">
+          <ion-label position="stacked" color="secondary">Data de nascimento</ion-label>
+          <ion-text >{{ dateValue }}</ion-text>
+          <ion-popover trigger="open-date-input" show-backdrop="false">
+            <ng-template>
+              <ion-datetime formControlName="dataNascimento"
+                #popoverDatetime
+                presentation="date"
+                (ionChange)="dateValue = formatDate(popoverDatetime.value)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+        <p class="red" *ngIf="formGroup.controls.dataNascimento.dirty && formGroup.controls.dataNascimento.errors" margin-left>Valor inválido</p>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Naturalidade</ion-label>
+          <ion-input formControlName="naturalidade" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="secondary">Nacionalidade</ion-label>
+          <ion-input formControlName="nacionalidade" type="text"></ion-input>
+        </ion-item>
+
+        <ion-button shape="round" expand="block" type="submit" [disabled]="formGroup.invalid">{{ headerModal }}</ion-button>
+      </form>    
+  </ion-content>

@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>    
+    <ion-title slot="secondary">Pessoas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-fab slot="fixed" vertical="top" edge horizontal="start" >
+    <ion-fab-button color="success" id="nova-pessoa-btn" (click)="abrirDialogoPessoa()"><ion-icon name="add"></ion-icon></ion-fab-button>
+  </ion-fab>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <ion-list>
+    <ion-item-group *ngFor="let pessoa of items">      
+
+      <ion-item>
+        <ion-label>
+          <h2>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  Nome: <strong>{{ pessoa.nome }}</strong>
+                </ion-col>
+                <ion-col>
+                  Cpf: <strong>{{ pessoa.cpf }}</strong>
+                </ion-col>
+                <ion-col>
+                  Email: <strong>{{ pessoa.email }}</strong>
+                </ion-col>
+              </ion-row>
+            </ion-grid>              
+          </h2>
+          <h4>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  Nascimento: {{ pessoa.dataNascimento | date:'dd/MM/yyyy' }} 
+                </ion-col>
+                <ion-col>
+                  Sexo: {{ formatarSexo(pessoa.sexo) }}
+                </ion-col>
+                <ion-col></ion-col>
+              </ion-row>
+            </ion-grid>
+          </h4>
+          <p *ngIf="pessoa.naturalidade || pessoa.nacionalidade">
+            <ion-grid>
+              <ion-row>
+                <ion-col *ngIf="pessoa.naturalidade">
+                  Naturalidade: {{ pessoa.naturalidade }}
+                </ion-col>
+                <ion-col *ngIf="pessoa.nacionalidade">
+                  Nacionalidade: {{ pessoa.nacionalidade }}
+                </ion-col>
+                <ion-col></ion-col>                
+              </ion-row>
+            </ion-grid>   
+          </p>
+          <p>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  Registrado: {{ pessoa.createDate  | date:'dd/MM/yyyy HH:mm:ss' }} 
+                </ion-col>
+                <ion-col>
+                  {{ pessoa.modifyDate === pessoa.createDate ? '' : 'Atualizado: ' + (pessoa.modifyDate | date:'dd/MM/yyyy HH:mm:ss') }}
+                </ion-col>
+                <ion-col></ion-col>
+              </ion-row>
+            </ion-grid>   
+          </p>
+        </ion-label>
+        
+        <ion-button slot="end" size="default" (click)="abrirDialogoPessoa(pessoa.id)"><ion-icon name="create"></ion-icon></ion-button>
+        <ion-button slot="end" size="default" color="danger" (click)="confirmarRemoverPessoa(pessoa.id)" ><ion-icon name="trash"></ion-icon></ion-button>
+      </ion-item>
+
+    </ion-item-group>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>
